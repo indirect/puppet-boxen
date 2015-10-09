@@ -10,6 +10,10 @@
 #       If true, creates "${dir}/.env" from
 #       "puppet:///modules/projects/${name}/dotenv".
 #
+#     localenv =>
+#       If true, creates "${dir}/.env.local" from
+#       "puppet:///modules/projects/${name}/dotenv.local".
+#
 #     elasticsearch =>
 #       If true, ensures elasticsearch is installed.
 #
@@ -103,6 +107,13 @@ define boxen::project(
   if $dotenv {
     file { "${repo_dir}/.env":
       source  => "puppet:///modules/projects/${name}/dotenv",
+      require => Repository[$repo_dir],
+    }
+  }
+
+  if $localenv {
+    file { "${repo_dir}/.env.local":
+      source  => "puppet:///modules/projects/${name}/dotenv.local",
       require => Repository[$repo_dir],
     }
   }
